@@ -83,3 +83,7 @@ fsacpath.txt
 */obj/*
 obj/*
 bin/*
+
+#Paket dependency manager
+.paket/
+paket-files/
