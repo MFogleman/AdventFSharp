@@ -1,7 +1,12 @@
-﻿open System
+﻿#r "paket:
+nuget Fake.IO.FileSystem
+nuget Fake.Core.Target //"
+// include Fake modules, see Fake modules section
+
+open System
 open System.IO
 
-let getFile = File.ReadAllLines "inputs/day01_01_input.txt"
+let getFile = File.ReadAllLines "day01_01_input.txt"
 let comps p x = p + x = 2020
 let multiply a b = a * b
 
@@ -14,15 +19,10 @@ let rec findDigitsToMatch2020 nums =
                 | Some q -> [p; q] // "Found a value %d" value
                 | None -> findDigitsToMatch2020 xs
 
-
-[<EntryPoint>]
-let main argv =
-    getFile 
+getFile 
     |> Array.toList
     |> List.map int
     |> findDigitsToMatch2020
     |> List.reduce multiply
     |> Console.WriteLine
-
-    0 // return an integer exit code
 
