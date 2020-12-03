@@ -1,28 +1,28 @@
 ﻿#r "paket:
 nuget Fake.IO.FileSystem
 nuget Fake.Core.Target //"
-// include Fake modules, see Fake modules section
 
 open System
 open System.IO
 
 let getFile = File.ReadAllLines "day01_01_input.txt"
-let comps p x = p + x = 2020
-let multiply a b = a * b
+let unpackAndMultiply tup =
+    let a,b = tup
+    a*b
+
+let sumEq2020 p x = p + x = 2020
 
 // find 2 numbers in nums that equal 2020
 let rec findDigitsToMatch2020 nums =
-    match nums with
-    | [p; q] -> [p; q]
-    | [] -> [] 
-    | p::xs -> match List.tryFind (comps p) xs with
-                | Some q -> [p; q] // "Found a value %d" value
-                | None -> findDigitsToMatch2020 xs
+    [for i in nums do
+        for j in nums do
+        if sumEq2020 i j then yield i,j]
 
 getFile 
     |> Array.toList
     |> List.map int
     |> findDigitsToMatch2020
-    |> List.reduce multiply
-    |> Console.WriteLine
+    |> (fun arr -> arr.Head)
+    |> unpackAndMultiply
+    |> Console.WriteLine // 1003971
 
