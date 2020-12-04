@@ -22,17 +22,25 @@ let addToRow = circleAdd 30
 
 // right 3 down 1
 // # is tree
-let countTrees (input: string list) =
-  let mutable total = 0;
-  let mutable y = 0;
-  for row in input.Tail do
-    y <- addToRow 3 y
-    printfn "On row %A, y is %A, val is %A" row y row.[y]
-    if row.[y] = '#' then total <- total + 1
-  total
-
+let rec countTrees total y (input: string list) =
+  match input with
+  | row::rows ->
+      let newY = addToRow 3 y
+      if row.[y] = '#'
+        then countTrees (total+1) newY rows
+        else countTrees total newY rows
+  | _ -> total
 
 getFile
   |> Array.toList
-  |> countTrees
+  |> countTrees 0 0
   |> Console.WriteLine // 286
+
+// let countTrees (input: string list) =
+//   let mutable total = 0;
+//   let mutable y = 0;
+//   for row in input.Tail do
+//     y <- addToRow 3 y
+//     printfn "On row %A, y is %A, val is %A" row y row.[y]
+//     if row.[y] = '#' then total <- total + 1
+//   total
