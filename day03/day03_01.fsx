@@ -7,11 +7,19 @@ open System.IO
 
 let getFile = File.ReadAllLines "day03_input.txt"
 
+(*
+  Our input repeats infinitely to the right.  It is 31 characters long
+  I.E elements 0-30
+  If we are at character 30, and need to go right 3, we loop back to 0, 1, 2.
+  so our new total is starting position 30 + add 3  = 33.  Then 33 - 30 elements
+  puts us at element 3.  Then account for 0 indexing, and avoid the off by 1 error
+*)
 let circleAdd max a b =
   let sum = a + b
   if sum > max then (sum-max-1) else sum
 
 let addToRow = circleAdd 30
+
 // right 3 down 1
 // # is tree
 let countTrees (input: string list) =
@@ -22,12 +30,6 @@ let countTrees (input: string list) =
     printfn "On row %A, y is %A, val is %A" row y row.[y]
     if row.[y] = '#' then total <- total + 1
   total
-  // let tail = input.Tail;
-  // List.iter (funtail.iter
-
-
-
-
 
 
 getFile
