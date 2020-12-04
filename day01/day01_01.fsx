@@ -5,7 +5,7 @@ nuget Fake.Core.Target //"
 open System
 open System.IO
 
-let getFile = File.ReadAllLines "day01_01_input.txt"
+let getFile = File.ReadAllLines "day01_input.txt"
 let unpackAndMultiply tup =
     let a,b = tup
     a*b
@@ -18,7 +18,7 @@ let rec findDigitsToMatch2020 nums =
         for j in nums do
         if sumEq2020 i j then yield i,j]
 
-getFile 
+getFile
     |> Array.toList
     |> List.map int
     |> findDigitsToMatch2020
