@@ -6,8 +6,6 @@ open System
 open System.IO
 
 let getFile = File.ReadAllLines "day04_input.txt"
-
-
 let req = ["byr";"iyr";"eyr";"hgt";"hcl";"ecl";"pid"]
 
 let stringify acc curr =
@@ -19,7 +17,6 @@ let isIn (passport: string) acc reqStr =
   match passport.Contains reqStr with
   | true -> acc + 1
   | false -> acc
-
 
 // check over all requirements in passport.  If all are valid (7)
 // increment acc for 1 more valid passport

@@ -42,19 +42,8 @@ let rec countTrees  right down total y (input: string list) =
         else countTrees right down total newY (nextRow rows down)
   | _ -> total |> bigint
 
-
 getFile
   |> Array.toList
   |> juxt [countTrees 1 1 0 0; countTrees 3 1 0 0; countTrees 5 1 0 0; countTrees 7 1 0 0; countTrees 1 2 0 0]
-  // |> List.map (fun n -> n |> bigint)
   |> List.reduce multiply // 60 * 286 * 76 * 62 * 45
   |> Console.WriteLine // 3638606400
-
-// let countTrees (input: string list) =
-//   let mutable total = 0;
-//   let mutable y = 0;
-//   for row in input.Tail do
-//     y <- addToRow 3 y
-//     printfn "On row %A, y is %A, val is %A" row y row.[y]
-//     if row.[y] = '#' then total <- total + 1
-//   total
