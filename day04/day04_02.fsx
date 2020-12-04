@@ -6,7 +6,6 @@ open System
 open System.IO
 open System.Text.RegularExpressions
 
-// let getFile = File.ReadAllLines "day04_input.txt"
 let getFile = File.ReadAllText "day04_input.txt"
 
 let validRange min max (str: string) =
@@ -18,19 +17,14 @@ let matches re str =
   let m = Regex.Match(str, re)
   m.Success
 
-let validEcl = matches "^amb|blu|brn|gry|grn|hzl|oth$" // (ecl: string) =
-
+let validEcl = matches "^amb|blu|brn|gry|grn|hzl|oth$"
+let validHcl= matches "^#[0-9a-f]{6}$"
+let validPid = matches "^\d{9}$"
 let validByr = validRange 1920 2002
 let validIyr = validRange 2010 2020
 let validEyr = validRange 2020 2030
 let validIn = validRange 59 76
 let validCm = validRange 150 193
-
-let validHcl= matches "^#[0-9a-f]{6}$"
-
-// 9 digits
-let validPid = matches "^\d{9}$"
-
 let validHgt str =
   match str with
   | str when matches "^\d\d\dcm$" str -> str.[0..2] |> validCm
@@ -53,23 +47,25 @@ let validatePassports totalValidPassports (passport: (string * string) []) =
   | 7 -> totalValidPassports + 1
   | _ -> totalValidPassports
 
+let kvTupleFromField (field: string) =
+  let arr = field.Split(':')
+  (arr.[0], arr.[1])
+
 let normalizePassport (passport: string) =
-  passport.Split(' ') |> Array.map(fun field ->
-    let arr = field.Split(':')
-    let k = arr.[0]
-    let v = arr.[1]
-    (k, v)
-  )
+  passport
+    .Replace('\n', ' ')
+    .Split(' ')
+    |> Array.map(kvTupleFromField)
 
 let replaceNewlineWithWhitespace (str: string) =
   str.Replace('\n', ' ' )
 
-let splitOnNewLine (str: string) =
+let splitOnEmptyLine (str: string) =
   str.Split([|"\n\n"|], StringSplitOptions.None)
 
 getFile
-  |> splitOnNewLine
-  |> Array.map(replaceNewlineWithWhitespace >> normalizePassport)
+  |> splitOnEmptyLine
+  |> Array.map(normalizePassport)
   |> Array.fold validatePassports 0
   |> Console.WriteLine
   // 127
