@@ -16,15 +16,17 @@ let stringify acc curr =
   | _ -> acc + curr
 
 let isIn (passport: string) acc reqStr =
-  if passport.Contains reqStr
-    then acc + 1
-    else acc
+  match passport.Contains reqStr with
+  | true -> acc + 1
+  | false -> acc
 
 
+// check over all requirements in passport.  If all are valid (7)
+// increment acc for 1 more valid passport
 let countValid acc passport =
-  if List.fold (isIn passport) 0 req = 7
-    then acc + 1
-    else acc
+  match List.fold (isIn passport) 0 req with
+  | 7 -> acc + 1
+  | _ -> acc
 
 
 getFile
