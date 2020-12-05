@@ -23,10 +23,13 @@ let tupleToSeatId (b, c) =
 
 let convertToSeatId = Array.map (String.map(toBinary) >> toTuple >> tupleToSeatId)
 
+let (|FoundNext|NoNext|) (a, b) =
+    if a + 1 = b then FoundNext else NoNext
+
 let rec findFirstMissing (nums: int list) =
-    match nums with
-    | nums when (nums.[0] + 1) = nums.[1] -> findFirstMissing nums.Tail
-    | _ -> nums.Head + 1
+    match (nums.[0], nums.[1]) with
+    | FoundNext -> findFirstMissing nums.Tail
+    | NoNext -> nums.[0] + 1
 
 getFile
   |> convertToSeatId
