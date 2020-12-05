@@ -25,8 +25,8 @@ let convertToSeatId = Array.map (String.map(toBinary) >> toTuple >> tupleToSeatI
 
 let rec findFirstMissing (nums: int list) =
     match nums with
-    | row::rows -> if row + 1 = rows.Head then findFirstMissing rows else row+1
-    | _ -> -999
+    | nums when (nums.[0] + 1) = nums.[1] -> findFirstMissing nums.Tail
+    | _ -> nums.Head + 1
 
 getFile
   |> convertToSeatId
