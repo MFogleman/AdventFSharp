@@ -21,13 +21,15 @@ let toTuple (str: string) =
   (str.[0..6], str.[7..9])
 
 let tupleToInt (a, b) =
- (Convert.ToInt32(a, 2), Convert.ToInt32(b, 2))
+ Convert.ToInt32(a, 2) * 8 + Convert.ToInt32(b, 2)
 
 
 let convertToBinaryTuples = Array.map (String.map(toBinary) >> toTuple >> tupleToInt)
 
 getFile
   |> convertToBinaryTuples
+  |> Array.sort
+  |> Array.last
   |> printfn "DEBUG:: %A"
 //     |> Array.map int
 //     |> findDigitsToMatch2020
