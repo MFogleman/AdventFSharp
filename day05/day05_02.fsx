@@ -1,7 +1,3 @@
-#r "paket:
-nuget Fake.IO.FileSystem
-nuget Fake.Core.Target //"
-
 open System
 open System.IO
 
@@ -21,7 +17,7 @@ let toTuple (str: string) =
 let tupleToSeatId (b, c) =
  (Convert.ToInt32(b, 2) * 8 + Convert.ToInt32(c, 2))
 
-let convertToSeatId = Array.map (String.map(toBinary) >> toTuple >> tupleToSeatId)
+let convertToSeatId = String.map(toBinary) >> toTuple >> tupleToSeatId
 
 let (|FoundNext|NoNext|) (a, b) =
     if a + 1 = b then FoundNext else NoNext
@@ -32,7 +28,7 @@ let rec findFirstMissing (nums: int list) =
     | NoNext -> nums.[0] + 1
 
 getFile
-  |> convertToSeatId
+  |> Array.map convertToSeatId
   |> Array.sort
   |> Array.toList
   |> findFirstMissing
