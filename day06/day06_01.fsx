@@ -1,8 +1,8 @@
 open System
 open System.IO
 open System.Text.RegularExpressions
-let getFile = File.ReadAllText "day06_input.txt"
 
+let getFile = File.ReadAllText "day06_input.txt"
 
 let normalizeInput (str: string) =
   str.Split([|"\n\n"|], StringSplitOptions.None)
