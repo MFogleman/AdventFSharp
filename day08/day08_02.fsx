@@ -61,9 +61,11 @@ let parseIdx instruction =
   | Jmp -> instruction.Idx + instruction.Argument
   | _   -> instruction.Idx + 1
 
+exception InfiniteException of string
+
 let rec runProgram (state: State) (instruction: Instruction) (program: Program) =
   if List.exists (fun histIdx -> histIdx = instruction.Idx) state.History then
-    failwith (sprintf "Entered infinite loop, current state is %A" state)
+    raise (InfiniteException(sprintf"Entered infinite loop, current state is %A" state))
 
   let (newState, newIdx) = ( parseState(state, instruction), (parseIdx instruction) )
 
@@ -72,14 +74,39 @@ let rec runProgram (state: State) (instruction: Instruction) (program: Program) 
   match newInst with
   | None -> newState.Accumulator
   | Some newInst  -> runProgram newState newInst program
-  // runProgram newState newInst program
-  // runProgram newState program.[newIdx] program
 
 let initProgram program =
   runProgram defaultState (List.head program) program
 
+let toggleNopJmp operator =
+  match operator with
+  |Nop -> Jmp
+  |Jmp -> Nop
+  |_ -> operator
+
+
+let rec bruteForceFix checkedIdxs (program: Instruction list)  =
+  let swpIdx = (List.findIndex (fun inst ->
+    (inst.Operation = Nop || inst.Operation = Jmp ) && inst.Idx > checkedIdxs
+  ) program )
+
+  let swpVal = program.[swpIdx]
+  let newVal = { swpVal with Operation = (toggleNopJmp swpVal.Operation) }
+
+  let beforeVal = program.[0..swpIdx-1]
+  let afterVal = program.[swpIdx+1..]
+
+  let newProgram = beforeVal@[newVal]@afterVal
+
+  try
+    let x = initProgram newProgram
+    printfn "works when we fix idx %A " swpIdx // 198
+    x
+  with InfiniteException(str) ->
+    bruteForceFix swpIdx program
+
 getFile
   |> Array.toList
   |> List.mapi toInstruction
-  |> initProgram // 1217
-  |> printfn "Program finished with %A"
+  |> bruteForceFix 0
+  |> printfn "Program finished with %A" // 501

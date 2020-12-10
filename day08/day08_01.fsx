@@ -72,8 +72,6 @@ let rec runProgram (state: State) (instruction: Instruction) (program: Program) 
   match newInst with
   | None -> newState.Accumulator
   | Some newInst  -> runProgram newState newInst program
-  // runProgram newState newInst program
-  // runProgram newState program.[newIdx] program
 
 let initProgram program =
   runProgram defaultState (List.head program) program
