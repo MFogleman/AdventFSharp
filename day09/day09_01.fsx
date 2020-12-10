@@ -8,14 +8,13 @@ type Data = {
   Num: uint64
 }
 
-let hasSum (lst: Data list ) (targetData: Data) =
-  let target = targetData.Num
+let differentElementSumsTo target d1 d2 =
+  d1.Num + d2.Num = target.Num && d1.Idx <> d2.Idx
 
-  (List.tryFind (fun d1 ->
-    (List.exists(fun d2 ->
-      d1.Num + d2.Num = target && d1.Idx <> d2.Idx
-    ) lst)
-  ) lst)
+let hasSum (lst: Data list ) (targetData: Data) =
+  List.tryFind (fun d1 ->
+    (List.exists(differentElementSumsTo targetData d1) lst)
+  ) lst
 
 let PREAMBLE = 25
 let WINDOW = PREAMBLE+1
@@ -40,9 +39,7 @@ let worseScript (target) (nums: Data list ) =
         let min = List.minBy(fun d -> d.Num) newArr
         let max = List.maxBy(fun d -> d.Num) newArr
 
-        let minA = min.Num |> int
-        let maxA = max.Num |> int
-        let output = minA + maxA
+        let output = (min.Num |> int) + (max.Num |> int)
         printfn "output:: %A" output
         // output:: 16773507 42568378 59341885
     ]
@@ -58,7 +55,7 @@ let worseScript (target) (nums: Data list ) =
 //   |> Console.WriteLine
 
 
-part2
+// part2
 getFile
   |> Array.toList
   |> List.mapi (fun (idx: int) (num: string) -> { Idx = idx|>int; Num = Convert.ToUInt64(num)})
