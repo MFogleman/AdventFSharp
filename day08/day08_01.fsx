@@ -2,50 +2,103 @@ open System
 open System.IO
 open System.Text.RegularExpressions
 
+
+
+type Acc = string
+type Jmp = string
+type Nop = string
+type Operation = Acc | Jmp | Nop
+
+type Idx = int
+type Argument = int
+type Accumulator = int
+
+type Instruction = {
+  Operation: Operation
+  Argument: Argument
+  Idx: Idx
+}
+
+type Program = Instruction list
+
+type State = {
+  History: Idx list
+  Accumulator: Accumulator
+}
+
+let defaultState = {
+  History = []
+  Accumulator = 0
+}
+
+let (|Acc|Jmp|Nop|) str =
+  match str with
+  | "acc" -> Acc
+  | "jmp" -> Jmp
+  | "nop" -> Nop
+  | _ -> failwith "Invalid operator"
+
 let getFile = File.ReadAllLines "day08_input.txt"
 
-let ReMatches re str =
-  let m = Regex.Match(str, re)
-  m.Success
+let testOp str =
+  match str with
+  |Acc -> Acc
+  |Jmp -> Jmp
+  |Nop -> Nop
 
-let parseAcc cmd = 4
-let parseJmp cmd idx = 2
+let parseOpAndArg (str: string): Operation * Argument =
+  let arr = str.Split([|' '|])
+  let op = testOp arr.[0]
+  let arg = arr.[1] |> int
+  (op, arg)
+
+let toInstruction (idx: int) (str: string) =
+  let arr = str.Split([|' '|])
+  let operation = testOp arr.[0]
+  let argument = arr.[1] |> int
+  {
+   Operation = operation
+   Argument = argument
+   Idx = idx
+  }
+
+let rec runProgram (state: State) (instruction: Instruction) (program: Program) =
+  if List.exists (fun histIdx -> histIdx = instruction.Idx) state.History then
+    failwith (sprintf "Entered infinite loop, current state is %A" state)
+
+  let newHistory = instruction.Idx::state.History
+
+  if instruction.Operation = Acc then
+    let newState = {
+      History = newHistory
+      Accumulator = state.Accumulator + instruction.Argument
+    }
+    let newIdx = instruction.Idx + 1
+    runProgram newState program.[newIdx] program
+
+  if instruction.Operation = Nop then
+    let newState = {
+      History = newHistory
+      Accumulator = state.Accumulator
+    }
+    let newIdx = instruction.Idx + 1
+    runProgram newState program.[newIdx] program
+
+  if instruction.Operation = Jmp then
+    let newState = {
+      History = newHistory
+      Accumulator = state.Accumulator
+    }
+    let newIdx = instruction.Idx + instruction.Argument
+    runProgram newState program.[newIdx] program
 
 
-
-let (|Nop|Acc|Jmp|Err|) cmd =
-  if ReMatches cmd "^nop"
-    then Nop
-  if ReMatches cmd "^acc"
-    then Acc
-  if ReMatches cmd "^jmp"
-    then Jmp
-
-  else Err
-  // else None
-
-let rec execCmd idx (program: string list) (history: int list) acc =
-  if List.contains idx history
-    then acc
-
-  match program.[idx] with
-    | ReMatches
-  if program.[idx] = "nop"
-    then execCmd (idx+1) program history acc
-
-  if program.[idx] = "acc"
-    then
-      let newIdx = parseAcc program.[idx]
-      execCmd newIdx program history acc
-
-  if program.[idx] = "jmp"
-    then
-      let newIdx = parseJmp program.[idx] idx
-      execCmd newIdx program history acc
+let initProgram program =
+  match program with
+  | (x::xs) -> runProgram defaultState x program
+  | _ -> failwith "could not start program"
 
 getFile
   |> Array.toList
-  |> printfn "DEBUG:: %A"
-  // |> findIn [] ["shiny gold"]
-  // |> List.length
-  // |> Console.WriteLine
+  |> List.mapi toInstruction
+  |> initProgram // 1217
