@@ -24,10 +24,10 @@ let rec solver (combos: uint64) streak (adapters: int list) =
   |_ -> combos
 
 getFile
-  |> Array.map (int)
+  |> Array.map int
   |> Array.sort
   |> Array.toList
   |> prepend0AppendFinal
-  |> solver ( 1|> uint64 ) 1
+  |> solver (uint64 1) 1
   |> Console.WriteLine
 // 129586085429248
