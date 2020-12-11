@@ -3,10 +3,6 @@ open System.IO
 
 let getFile = File.ReadAllLines "day10_input.txt"
 
-type One = One of int
-type Two = Two of int
-type Three = Three of int
-type Diff = One | Two | Three
 type State = {
   One  : int
   Two  : int
