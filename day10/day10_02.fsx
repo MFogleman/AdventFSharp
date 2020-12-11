@@ -11,10 +11,10 @@ let prepend0AppendFinal (adapters: int list) =
   let newLast = List.last adapters |> (fun n -> n + 3)
   [0]@adapters@[newLast]
 
-let TRIBONACCI = [| 1; 1; 2; 4; 7; 13; 24; 44; 81; 149; |]
+let TRIBONACCI = [| 0; 1; 1; 2; 4; 7; 13; 24; 44; 81; 149; |]
 
 let getTrib num =
-  TRIBONACCI.[num-1] |> uint64
+  TRIBONACCI.[num] |> uint64
 
 let rec solver (combos: uint64) streak (adapters: int list) =
   match adapters with
@@ -31,4 +31,3 @@ getFile
   |> solver ( 1|> uint64 ) 1
   |> Console.WriteLine
 // 129586085429248
-
