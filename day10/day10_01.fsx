@@ -8,17 +8,17 @@ type Two = Two of int
 type Three = Three of int
 type Diff = One | Two | Three
 type State = {
-  One: int
-  Two: int
+  One  : int
+  Two  : int
   Three: int
-  Top: int
+  Top  : int
 }
 
 let defaultState = {
-  One = 0;
-  Two = 0;
+  One   = 0;
+  Two   = 0;
   Three = 1; // account for device adapter
-  Top = 0;
+  Top   = 0;
 }
 
 let parseDiff num =
