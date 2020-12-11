@@ -21,13 +21,6 @@ let defaultState = {
   Top   = 0;
 }
 
-let parseDiff num =
-  match num with
-  |1 -> One
-  |2 -> Two
-  |3 -> Three
-  |_ -> failwith "Unexpected diff"
-
 let countDiffs state num =
   match num - state.Top with
   |1 -> { state with One = state.One + 1; Top = num; }
