@@ -1,7 +1,3 @@
-Advent of Code[About][Events][Shop][Settings][Log Out]Marc Fogleman 19*
-  {:year 2020}[Calendar][AoC++][Sponsors][Leaderboard][Stats]
-Our sponsors help make Advent of Code possible:
-TwilioQuest - Learn to code and lead your intrepid crew on a mission to save The Cloud in TwilioQuest, a PC role-playing game inspired by classics of the 16-bit era. Free forever, and available now for Windows, Mac, and Linux.
 --- Day 10: Adapter Array ---
 Patched into the aircraft's data port, you discover weather forecasts of a massive tropical storm. Before you can figure out whether it will impact your vacation plans, however, your device suddenly turns off!
 
@@ -85,8 +81,6 @@ Find a chain that uses all of your adapters to connect the charging outlet to yo
 
 Your puzzle answer was 2376.
 
-The first half of this puzzle is complete! It provides one gold star: *
-
 --- Part Two ---
 To completely determine whether you have enough adapters, you'll need to figure out how many different ways they can be arranged. Every arrangement needs to connect the charging outlet to your device. The previous rules about when adapters can successfully connect still apply.
 
@@ -139,9 +133,6 @@ You glance back down at your bag and try to remember why you brought so many ada
 
 What is the total number of distinct ways you can arrange the adapters to connect the charging outlet to your device?
 
-Answer: 
- 
+Your puzzle answer was 129586085429248.
 
-Although it hasn't changed, you can still get your puzzle input.
-
-You can also [Share] this puzzle.
+Both parts of this puzzle are complete! They provide two gold stars: **
