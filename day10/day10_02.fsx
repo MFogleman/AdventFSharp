@@ -1,51 +1,35 @@
 open System
 open System.IO
+(*
+  I admittedly am still a little lost on the math behind this.  This is largely an implementation of
+  pseale's solution from https://github.com/pseale/advent-of-code/blob/main/src/day10/src/index.test.js
 
+*)
 let getFile = File.ReadAllLines "day10_input.txt"
 
-type One = One of int
-type Two = Two of int
-type Three = Three of int
-type Diff = One | Two | Three
-type State = {
-  One  : int
-  Two  : int
-  Three: int
-  Top  : int
-}
+let prepend0AppendFinal (lst: int list) =
+  let newLast = List.last lst |> (fun n -> n + 3)
+  [0]@lst@[newLast]
 
-let defaultState = {
-  One   = 0;
-  Two   = 0;
-  Three = 0;
-  Top   = 0;
-}
+let TRIB = [| 1; 1; 2; 4; 7; 13; 24; 44; 81; 149; |]
 
-let parseDiff num =
-  match num with
-  |1 -> One
-  |2 -> Two
-  |3 -> Three
-  |_ -> failwith "Unexpected diff"
+let getTrib num =
+  TRIB.[num-1]
 
-let countDiffs state num =
-  match num - state.Top with
-  |1 -> { state with One = state.One + 1; Top = num; }
-  |2 -> { state with Two = state.Two + 1; Top = num; }
-  |3 -> { state with Three = state.Three + 1; Top = num; }
-  |_ -> failwith "Unexpected diff"
+let rec solver factor streak (adapters: int list) =
+  match adapters with
+  |x::xs -> if List.contains (x+1) adapters
+              then solver factor (streak + 1) xs
+              else solver (factor * (getTrib streak) ) 1 xs
+  |_ -> factor
 
-let multOnesAndThrees state =
-  state.One * state.Three
-
-let addDeviceBuiltInAdapter state =
-  { state with Three = state.Three + 1; Top = state.Top + 3}
 
 getFile
   |> Array.map (int)
   |> Array.sort
-  |> Array.fold countDiffs defaultState
-  |> addDeviceBuiltInAdapter
-  |> multOnesAndThrees
-  |> Console.WriteLine
+  |> Array.toList
+  |> prepend0AppendFinal
+  |> solver 1 1
+  |> printfn "debug:: %A"
+
 // 2376
